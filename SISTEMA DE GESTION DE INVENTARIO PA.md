@@ -8,34 +8,21 @@
 
 **Johan Garcia Mora**
 
-ED\_GP  Gerente de proyecto, 
+Módulo login.
 
-ED\_ASO  diseñador de software, 
-
-módulo login.                        
-
-ED\_AS  Analistas de sistemas, 
-
-módulo PQR
+Módulo PQR
 
 
 
 **Jhon Jairo Trilleras Jimenez**
-ED\_L  Líder de proyecto, 
 
-ED\_T  tester. 
-
-Módulo gerente inventario 
+Módulo inventario
 
 
 
 **Jhonatan Garcia Castellanos**
 
-ED\_LD  Líder de desarrolladores, 
+Módulo usuario
 
-ED\_AC  administrador de cuentas.                  
-
-Módulo perfil de usuario.                                                   
-
-ED\_DG  Diseñador gráfico, Módulo de venta
+Módulo venta
 
