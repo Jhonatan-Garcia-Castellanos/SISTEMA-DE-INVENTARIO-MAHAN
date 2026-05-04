@@ -1,7 +1,6 @@
 Jhonatan Garcia Castellanos
 RF 1.1	El sistema debe permitir el inicio de sesión para restringir el acceso según el rol.
-RF 1.2	"Gestión de Ventas: Debe permitir el registro de transacciones comerciales de manera digital
-"
+RF 1.2	Gestión de Ventas: Debe permitir el registro de transacciones comerciales de manera digital
 RF 1.3	Control de Inventarios: Registro, seguimiento y conteo automatizado de productos.
 RF 2.1	Agregar, editar y eliminar productos.
 RF 2.2	Registrar movimientos de stock (entradas/salidas).
