@@ -9,20 +9,21 @@
 **Johan Garcia Mora**
 
 Módulo login.
-
+Modulo Inventario
 Módulo PQR
 
 
 
 **Jhon Jairo Trilleras Jimenez**
 
-Módulo inventario
+Modulo Registrar
+Módulo pagos
 
 
 
 **Jhonatan Garcia Castellanos**
 
 Módulo usuario
-
+Modulo proveedores
 Módulo venta
 
