@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import Login from './componentes/AppSistema'
-import Inventario from './componentes/SistemaGestion'
+import Inventario from './componentes/SISTEMAGES'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
 import './App.css'
