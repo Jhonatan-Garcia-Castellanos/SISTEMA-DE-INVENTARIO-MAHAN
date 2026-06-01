@@ -296,49 +296,7 @@ function Register({ users, setUsers, onSwitch }) {
 }
 
 // ─── LOGIN (RF 2.x) ───────────────────────────────────────────────────────────
-function Login({ users, setCurrentUser, onSwitch }) {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
-  const [banner, setBanner] = useState(null);
 
-  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const submit = () => {
-    const e = {};
-    if (!validateEmail(form.email)) e.email = "Formato de correo inválido."; // RF 2.2
-    if (!form.password) e.password = "Ingresa tu contraseña."; // RF 2.3
-    setErrors(e);
-    if (Object.keys(e).length) return;
-    const user = users.find((u) => u.email === form.email && u.password === form.password); // RF 2.4
-    if (!user) {
-      setBanner({ type: "error", msg: "Credenciales incorrectas. Verifica tu correo y contraseña." });
-      return;
-    }
-    setCurrentUser(user);
-  };
-
-  return (
-    <div style={css.card}>
-      <div style={css.title}>Iniciar sesión</div>
-      <div style={css.subtitle}>Acceso según rol del usuario</div>
-      <Banner type={banner?.type} msg={banner?.msg} />
-      <Field label="Correo electrónico" error={errors.email}>
-        <Input type="email" placeholder="tu@correo.com" value={form.email} onChange={set("email")} error={errors.email} />
-      </Field>
-      <Field label="Contraseña" error={errors.password}>
-        <Input type="password" placeholder="Tu contraseña" value={form.password} onChange={set("password")} error={errors.password} />
-      </Field>
-      <div style={{ textAlign: "right", marginBottom: 20 }}>
-        <button style={css.link} onClick={() => onSwitch("recovery")}>¿Olvidaste tu contraseña?</button> {/* RF 2.7 */}
-      </div>
-      <button style={css.btn()} onClick={submit}>Entrar</button>
-      <div style={{ textAlign: "center", marginTop: 18, fontSize: 13, color: G.muted }}>
-        ¿No tienes cuenta?{" "}
-        <button style={css.link} onClick={() => onSwitch("register")}>Regístrate</button>
-      </div>
-    </div>
-  );
-}
 
 // ─── RECUPERAR CONTRASEÑA (RF 2.7) ────────────────────────────────────────────
 function Recovery({ onSwitch }) {
