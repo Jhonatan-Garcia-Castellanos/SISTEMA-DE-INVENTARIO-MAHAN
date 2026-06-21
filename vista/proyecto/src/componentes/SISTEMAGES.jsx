@@ -1009,7 +1009,7 @@ const NAV = [
 ];
 
 // ─── APP PRINCIPAL ─────────────────────────────────────────────────────────────
-export default function App() {
+export default function App({ onLogout }) {
   const [page, setPage] = useState("dashboard");
   const [products,  setProducts]  = useState(initialProducts);
   const [movements, setMovements] = useState(initialMovements);
@@ -1094,13 +1094,32 @@ export default function App() {
 
             {/* Avatar */}
             <div style={{
-              width: "34px", height: "34px", borderRadius: "50%",
-              background: "linear-gradient(135deg, var(--accent-dim), var(--accent))",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: "12px", fontWeight: 700, color: "#0d1117", cursor: "pointer",
-              border: "2px solid var(--bg-elevated)",
+              display: "flex", alignItems: "center", gap: "10px",
             }}>
-              AU
+              <button
+                onClick={onLogout}
+                style={{
+                  background: "transparent",
+                  color: "var(--text-muted)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "999px",
+                  padding: "8px 12px",
+                  cursor: "pointer",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                }}
+              >
+                Cerrar sesión
+              </button>
+              <div style={{
+                width: "34px", height: "34px", borderRadius: "50%",
+                background: "linear-gradient(135deg, var(--accent-dim), var(--accent))",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: "12px", fontWeight: 700, color: "#0d1117", cursor: "pointer",
+                border: "2px solid var(--bg-elevated)",
+              }}>
+                AU
+              </div>
             </div>
           </div>
 
