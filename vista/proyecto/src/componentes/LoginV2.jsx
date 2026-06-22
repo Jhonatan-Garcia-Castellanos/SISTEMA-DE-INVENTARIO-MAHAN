@@ -267,9 +267,7 @@ const pwScore = (pw) => {
 const scoreColor = (s) => ["#D8DDE8", "#D94F4F", "#F0A500", "#2ECC71"][s] || T.border;
 const scoreLabel = ["", "Débil", "Regular", "Segura"];
 
-/* ─── Test emails (demo) ─── */
-const emailCorrecto = 'admin@demo.com'
-const passwordCorrecto = 'Admin123'
+
 
 
 /* ═══════════════════════════════════════
@@ -391,6 +389,34 @@ function RegisterForm({ onSuccess, onSwitch }) {
 /* ═══════════════════════════════════════
    LOGIN FORM
 ═══════════════════════════════════════ */
+// Usuarios de prueba
+const TEST_USERS = [
+  {
+    id: 1,
+    nombre: "Carlos Admin",
+    email: "admin@empresa.com",
+    password: "Admin123",
+    rol: "Administrador",
+    photo: "https://via.placeholder.com/120x120?text=Admin",
+  },
+  {
+    id: 2,
+    nombre: "Juan Usuario",
+    email: "usuario@empresa.com",
+    password: "Usuario123",
+    rol: "Usuario",
+    photo: "https://via.placeholder.com/120x120?text=Usuario",
+  },
+  {
+    id: 3,
+    nombre: "Maria Vendedor",
+    email: "vendedor@empresa.com",
+    password: "Vendedor123",
+    rol: "Vendedor",
+    photo: "https://via.placeholder.com/120x120?text=Vendedor",
+  },
+];
+
 function LoginForm({ onSuccess, onSwitch }) {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -402,9 +428,9 @@ function LoginForm({ onSuccess, onSwitch }) {
 
   const handleLogin = async () => {
     const e = {};
-    if (!form.email)               e.email    = "El correo es obligatorio.";
+    if (!form.email)              e.email    = "El correo es obligatorio.";
     else if (!emailRe.test(form.email)) e.email = "Ingresa un correo válido.";
-    if (!form.password)            e.password = "La contraseña es obligatoria.";
+    if (!form.password)           e.password = "La contraseña es obligatoria.";
     setErrors(e);
     if (Object.keys(e).length) return;
 
@@ -412,10 +438,17 @@ function LoginForm({ onSuccess, onSwitch }) {
     await new Promise((r) => setTimeout(r, 1000));
     setLoading(false);
 
-    // Demo: only demo@stockly.com / Password1 or registered emails work
-    if (emailRe.test(form.email) && form.password.length >= 8) {
+    const user = TEST_USERS.find(u => u.email === form.email && u.password === form.password);
+    if (user) {
       setBanner({ type: "success", msg: "Sesión iniciada correctamente. Redirigiendo…" });
-      setTimeout(() => onSuccess?.(), 1500);
+      const userData = {
+        id: user.id,
+        nombre: user.nombre,
+        email: user.email,
+        rol: user.rol,
+        photo: user.photo,
+      };
+      setTimeout(() => onSuccess?.(userData), 1500);
     } else {
       setBanner({ type: "error", msg: "Correo o contraseña incorrectos. Verifica tus datos." });
     }

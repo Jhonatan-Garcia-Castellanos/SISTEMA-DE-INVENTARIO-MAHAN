@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Login from './componentes/LoginV2'
-import Inventario from './componentes/SISTEMAGES'
+import Sistema from './componentes/SISTEMAGES'
 import './App.css'
 
 export default function App() {
@@ -12,9 +12,9 @@ export default function App() {
 
   return (
     !user ? (
-      <Login onLoginSuccess={(userData) => setUser(userData || { logged: true })} />
+      <Login onLoginSuccess={(userData) => setUser(userData || { nombre: 'Usuario', email: '', rol: 'Usuario', photo: '' })} />
     ) : (
-      <Inventario onLogout={handleLogout} />
+      <Sistema user={user} onLogout={handleLogout} />
     )
   )
 }

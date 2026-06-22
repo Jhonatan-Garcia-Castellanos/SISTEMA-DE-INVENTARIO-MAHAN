@@ -2,44 +2,44 @@ import { useState, useEffect, useRef } from "react";
 
 /* ─── ESTILOS GLOBALES ──────────────────────────────────────────────────────── */
 const GLOBAL_STYLES = `
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
   * { box-sizing: border-box; }
 
   body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: #0d1117;
-    color: #e6edf3;
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #F8F9FC;
+    color: #1B2A4A;
     margin: 0;
   }
 
   :root {
-    --bg-base:      #0d1117;
-    --bg-surface:   #161b22;
-    --bg-elevated:  #1c2330;
-    --bg-hover:     #21262d;
-    --border:       #30363d;
-    --border-light: #21262d;
-    --accent:       #a3e635;
-    --accent-dim:   #4d7c0f;
-    --accent-glow:  rgba(163,230,53,0.15);
-    --text-primary: #e6edf3;
-    --text-muted:   #8b949e;
-    --text-faint:   #484f58;
-    --red:          #f85149;
-    --red-bg:       rgba(248,81,73,0.1);
-    --green:        #3fb950;
-    --green-bg:     rgba(63,185,80,0.1);
-    --blue:         #58a6ff;
-    --blue-bg:      rgba(88,166,255,0.1);
-    --yellow:       #d29922;
-    --yellow-bg:    rgba(210,153,34,0.1);
-    --purple:       #bc8cff;
-    --purple-bg:    rgba(188,140,255,0.1);
+    --bg-base:      #F8F9FC;
+    --bg-surface:   #FFFFFF;
+    --bg-elevated:  #EBF0FD;
+    --bg-hover:     #E5ECFD;
+    --border:       #0a192b30;
+    --border-light: #0a192b15;
+    --accent:       #055c8f;
+    --accent-dim:   #0a3a5e;
+    --accent-glow:  rgba(5,92,143,0.1);
+    --text-primary: #1B2A4A;
+    --text-muted:   #6B7A99;
+    --text-faint:   #8B92A8;
+    --red:          #D94F4F;
+    --red-bg:       #FDF0F0;
+    --green:        #2ECC71;
+    --green-bg:     #EDFBF3;
+    --blue:         #055c8f;
+    --blue-bg:      #EBF0FD;
+    --yellow:       #F39C12;
+    --yellow-bg:    #FEF5E7;
+    --purple:       #8E44AD;
+    --purple-bg:    #F4ECF7;
     --radius:       10px;
     --radius-lg:    16px;
-    --shadow:       0 1px 3px rgba(0,0,0,0.4), 0 4px 12px rgba(0,0,0,0.25);
-    --shadow-lg:    0 8px 24px rgba(0,0,0,0.5);
+    --shadow:       0 2px 8px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+    --shadow-lg:    0 8px 24px rgba(0,0,0,0.12);
   }
 
   /* Scrollbar */
@@ -74,19 +74,21 @@ const GLOBAL_STYLES = `
 `;
 
 // ─── DATOS INICIALES ──────────────────────────────────────────────────────────
-const ROLES = ["Administrador", "Bodeguero", "Supervisor", "Usuario"];
+const ROLES = ["Administrador", "Usuario", "Vendedor", "Bodeguero"];
 
 const initialUsers = [
-  { id: 1, nombre: "Carlos Pérez", email: "carlos@empresa.com", rol: "Administrador", activo: true },
-  { id: 2, nombre: "Ana Gómez",   email: "ana@empresa.com",    rol: "Bodeguero",      activo: true },
+  { id: 1, nombre: "Carlos Admin", email: "admin@empresa.com", rol: "Administrador", activo: true },
+  { id: 2, nombre: "Juan Usuario", email: "usuario@empresa.com", rol: "Usuario", activo: true },
+  { id: 3, nombre: "Maria Vendedor", email: "vendedor@empresa.com", rol: "Vendedor", activo: true },
 ];
 
 const initialProducts = [
-  { id: 1, codigo: "P001", nombre: "Resma Papel A4",    cantidad: 50, minimo: 10, categoria: "Papelería"  },
-  { id: 2, codigo: "P002", nombre: "Tóner HP LaserJet", cantidad: 5,  minimo: 8,  categoria: "Tecnología" },
-  { id: 3, codigo: "P003", nombre: "Silla Ergonómica",  cantidad: 12, minimo: 3,  categoria: "Mobiliario" },
-  { id: 4, codigo: "P004", nombre: 'Monitor 24"',        cantidad: 2,  minimo: 5,  categoria: "Tecnología" },
+  { id: 1, codigo: "P001", nombre: "TV Box Ultra", cantidad: 50, minimo: 10, categoria: "TV Box", precioCompra: 350000, precioVenta: 490000, descripcion: "Reproductor multimedia 4K HDR con Android TV.", imagen: "https://via.placeholder.com/280x180?text=TV+Box+Ultra" },
+  { id: 2, codigo: "P002", nombre: "Mini PC Android", cantidad: 5, minimo: 8, categoria: "Smart TV", precioCompra: 250000, precioVenta: 350000, descripcion: "Compacta, con Wi-Fi y salida HDMI para tu televisor.", imagen: "https://via.placeholder.com/280x180?text=Mini+PC+Android" },
+  { id: 3, codigo: "P003", nombre: "Control Remoto Inteligente", cantidad: 12, minimo: 3, categoria: "Accesorios", precioCompra: 40000, precioVenta: 85000, descripcion: "Control por voz y accesos directos para apps de streaming.", imagen: "https://via.placeholder.com/280x180?text=Control+Inteligente" },
+  { id: 4, codigo: "P004", nombre: "Soporte TV de Pared", cantidad: 2, minimo: 5, categoria: "Mobiliario", precioCompra: 80000, precioVenta: 140000, descripcion: "Incluye kit de instalación para pantallas de hasta 55\".", imagen: "https://via.placeholder.com/280x180?text=Soporte+TV" },
 ];
+
 
 const initialMovements = [
   { id: 1, tipo: "entrada", productoId: 1, cantidad: 20, fecha: "2026-05-20", responsable: "Ana Gómez",    motivo: "Compra proveedor" },
@@ -567,11 +569,17 @@ function Inventario({ products, setProducts, movements, setMovements }) {
     if (products.find(p => p.codigo === form.codigo)) errs.codigo = "Código ya existe";
     if (Object.keys(errs).length) return setErrors(errs);
 
-    setProducts(prev => [...prev, {
+    const newProduct = {
       id: Date.now(), codigo: form.codigo, nombre: form.nombre,
       cantidad: Number(form.cantidad) || 0, minimo: Number(form.minimo) || 5,
       categoria: form.categoria || "General",
-    }]);
+      precioCompra: Number(form.precioCompra) || 0,
+      precioVenta: Number(form.precioVenta) || 0,
+      descripcion: `Producto: ${form.nombre}`,
+      imagen: "https://via.placeholder.com/280x180?text=" + encodeURIComponent(form.nombre),
+    };
+
+    setProducts(prev => [...prev, newProduct]);
     setModal(null);
   };
 
@@ -668,6 +676,12 @@ function Inventario({ products, setProducts, movements, setMovements }) {
               onChange={e => setForm(f => ({ ...f, cantidad: e.target.value }))} />
             <Input label="Stock Mínimo" type="number" min="0" value={form.minimo || ""}
               onChange={e => setForm(f => ({ ...f, minimo: e.target.value }))} />
+          </FormGrid>
+          <FormGrid cols={2}>
+            <Input label="Precio de Compra (COP)" type="number" min="0" value={form.precioCompra || ""}
+              onChange={e => setForm(f => ({ ...f, precioCompra: e.target.value }))} />
+            <Input label="Precio de Venta (COP)" type="number" min="0" value={form.precioVenta || ""}
+              onChange={e => setForm(f => ({ ...f, precioVenta: e.target.value }))} />
           </FormGrid>
           <FormActions onCancel={() => setModal(null)} onSubmit={handleAddProduct} submitLabel="Guardar Producto" />
         </div>
@@ -1000,26 +1014,261 @@ function Usuarios({ users, setUsers }) {
 }
 
 // ─── NAVEGACIÓN ───────────────────────────────────────────────────────────────
-const NAV = [
+const ADMIN_NAV = [
   { key: "dashboard",   label: "Dashboard",   icon: "⊞" },
   { key: "inventario",  label: "Inventario",  icon: "⬡" },
   { key: "movimientos", label: "Movimientos", icon: "⇄" },
   { key: "pqr",         label: "PQR",         icon: "◷" },
   { key: "usuarios",    label: "Usuarios",    icon: "⊙" },
+  { key: "catalogo",    label: "Catálogo",    icon: "🛍" },
 ];
 
+const USER_NAV = [
+  { key: "catalogo", label: "Catálogo", icon: "🛍" },
+  { key: "carrito", label: "Carrito", icon: "🧺" },
+  { key: "perfil",   label: "Perfil",   icon: "👤" },
+];
+
+const formatCurrency = (value) => `COP$ ${value.toLocaleString('es-CO', { maximumFractionDigits: 0 })}`;
+
+function Catalog({ items, user, onAdd, onEdit, onDelete }) {
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({});
+  const isAdmin = user?.rol === "Administrador";
+  const isVendedor = user?.rol === "Vendedor";
+  const canEdit = isAdmin || isVendedor;
+
+  const handleEditStart = (item) => {
+    setEditingId(item.id);
+    setEditForm({ ...item });
+  };
+
+  const handleEditSave = () => {
+    onEdit(editingId, editForm);
+    setEditingId(null);
+    setEditForm({});
+  };
+
+  const handleEditCancel = () => {
+    setEditingId(null);
+    setEditForm({});
+  };
+
+  return (
+    <div style={{ display: "grid", gap: "18px", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+      {items.map((item) => (
+        <Card key={item.id} hoverable style={{ display: "flex", flexDirection: "column", gap: "14px", position: "relative" }}>
+          {editingId === item.id ? (
+            <>
+              <input 
+                type="text" 
+                value={editForm.nombre || ""} 
+                onChange={(e) => setEditForm({ ...editForm, nombre: e.target.value })} 
+                placeholder="Nombre del producto"
+                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-elevated)", color: "var(--text-primary)", fontFamily: "'IBM Plex Sans', sans-serif" }}
+              />
+              {isAdmin && (
+                <input 
+                  type="number" 
+                  step="0.01"
+                  value={editForm.precioVenta || ""} 
+                  onChange={(e) => setEditForm({ ...editForm, precioVenta: parseFloat(e.target.value) })} 
+                  placeholder="Precio de Venta"
+                  style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-elevated)", color: "var(--text-primary)", fontFamily: "'IBM Plex Sans', sans-serif" }}
+                />
+              )}
+              {isVendedor && (
+                <div style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-surface)", color: "var(--text-muted)", fontFamily: "'IBM Plex Sans', sans-serif", fontSize: "14px" }}>
+                  Precio (fijo): {formatCurrency(editForm.precioVenta)}
+                </div>
+              )}
+              <input 
+                type="text" 
+                value={editForm.descripcion || ""} 
+                onChange={(e) => setEditForm({ ...editForm, descripcion: e.target.value })} 
+                placeholder="Descripción"
+                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-elevated)", color: "var(--text-primary)", fontFamily: "'IBM Plex Sans', sans-serif" }}
+              />
+              <input 
+                type="text" 
+                value={editForm.imagen || ""} 
+                onChange={(e) => setEditForm({ ...editForm, imagen: e.target.value })} 
+                placeholder="URL de imagen"
+                style={{ padding: "8px 12px", borderRadius: "8px", border: "1px solid var(--border)", background: "var(--bg-elevated)", color: "var(--text-primary)", fontFamily: "'IBM Plex Sans', sans-serif" }}
+              />
+              <div style={{ display: "flex", gap: "10px", marginTop: "auto" }}>
+                <button 
+                  onClick={handleEditSave}
+                  style={{ flex: 1, padding: "10px 12px", borderRadius: "8px", background: "var(--green)", color: "#fff", border: "none", fontWeight: 600, cursor: "pointer", fontFamily: "'IBM Plex Sans', sans-serif" }}
+                >Guardar</button>
+                <button 
+                  onClick={handleEditCancel}
+                  style={{ flex: 1, padding: "10px 12px", borderRadius: "8px", background: "var(--border)", color: "var(--text-primary)", border: "none", fontWeight: 600, cursor: "pointer", fontFamily: "'IBM Plex Sans', sans-serif" }}
+                >Cancelar</button>
+              </div>
+            </>
+          ) : (
+            <>
+              <img src={item.imagen} alt={item.nombre} style={{ width: "100%", borderRadius: "14px", objectFit: "cover", minHeight: "160px" }} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "12px" }}>
+                  <div>
+                    <h2 style={{ margin: 0, fontSize: "18px", lineHeight: 1.2 }}>{item.nombre}</h2>
+                    <p style={{ margin: "8px 0 0", color: "var(--text-faint)", fontSize: "13px" }}>{item.categoria}</p>
+                  </div>
+                  <Badge color="green">{formatCurrency(item.precioVenta)}</Badge>
+                </div>
+                <p style={{ margin: 0, color: "var(--text-muted)", fontSize: "14px", lineHeight: 1.6 }}>{item.descripcion}</p>
+              </div>
+              {isAdmin && (
+                <div style={{ display: "flex", gap: "10px", marginTop: "auto" }}>
+                  <button
+                    onClick={() => handleEditStart(item)}
+                    style={{
+                      flex: 1, padding: "10px 12px", borderRadius: "8px",
+                      background: "var(--blue)", color: "#fff", border: "none", fontWeight: 600,
+                      cursor: "pointer", fontFamily: "'IBM Plex Sans', sans-serif", fontSize: "14px"
+                    }}
+                  >✎ Editar</button>
+                  <button
+                    onClick={() => onDelete(item.id)}
+                    style={{
+                      flex: 1, padding: "10px 12px", borderRadius: "8px",
+                      background: "var(--red)", color: "#fff", border: "none", fontWeight: 600,
+                      cursor: "pointer", fontFamily: "'IBM Plex Sans', sans-serif", fontSize: "14px"
+                    }}
+                  >🗑 Eliminar</button>
+                </div>
+              )}
+              {isVendedor && (
+                <button
+                  onClick={() => handleEditStart(item)}
+                  style={{
+                    marginTop: "auto", padding: "10px 12px", borderRadius: "8px",
+                    background: "var(--blue)", color: "#fff", border: "none", fontWeight: 600,
+                    cursor: "pointer", fontFamily: "'IBM Plex Sans', sans-serif", fontSize: "14px", width: "100%"
+                  }}
+                >✎ Editar</button>
+              )}
+              {!canEdit && (
+                <button
+                  onClick={() => onAdd(item)}
+                  style={{
+                    marginTop: "auto", padding: "12px 16px", borderRadius: "12px",
+                    background: "var(--accent)", color: "#0d1117", border: "none", fontWeight: 700,
+                    cursor: "pointer", fontFamily: "'IBM Plex Sans', sans-serif",
+                  }}
+                >Añadir al carrito</button>
+              )}
+            </>
+          )}
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+function CartPage({ cart, onRemove, onClear }) {
+  const total = cart.reduce((sum, item) => sum + item.precioVenta * item.qty, 0);
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+      <SectionHeader title="Carrito de compra" action={cart.length ? <button onClick={onClear} style={{ background: "transparent", border: "1px solid var(--border)", padding: "10px 16px", borderRadius: "12px", color: "var(--text-muted)", cursor: "pointer" }}>Vaciar carrito</button> : null} />
+      {cart.length === 0 ? (
+        <Card><p style={{ margin: 0, color: "var(--text-muted)" }}>Tu carrito está vacío. Agrega productos desde el catálogo.</p></Card>
+      ) : (
+        <div style={{ display: "grid", gap: "14px" }}>
+          {cart.map((item) => (
+            <Card key={item.id} style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <img src={item.imagen} alt={item.nombre} style={{ width: "120px", height: "80px", borderRadius: "12px", objectFit: "cover" }} />
+              <div style={{ flex: 1 }}>
+                <p style={{ margin: 0, fontWeight: 700 }}>{item.nombre}</p>
+                <p style={{ margin: "6px 0 0", color: "var(--text-faint)", fontSize: "13px" }}>Cantidad: {item.qty}</p>
+                <p style={{ margin: "6px 0 0", color: "var(--text-muted)", fontSize: "13px" }}>Subtotal: {formatCurrency(item.precioVenta * item.qty)}</p>
+              </div>
+              <button onClick={() => onRemove(item.id)} style={{ background: "var(--red-bg)", color: "var(--red)", border: "none", borderRadius: "10px", padding: "10px 14px", cursor: "pointer" }}>Eliminar</button>
+            </Card>
+          ))}
+          <Card style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)" }}>Total</p>
+              <p style={{ margin: "6px 0 0", fontSize: "22px", fontWeight: 700 }}>{formatCurrency(total)}</p>
+            </div>
+            <button style={{ background: "var(--accent)", border: "none", borderRadius: "12px", padding: "14px 18px", fontWeight: 700, cursor: "pointer" }}>Pagar ahora</button>
+          </Card>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Profile({ userProfile, onUpdate }) {
+  const [form, setForm] = useState({ ...userProfile });
+  const [message, setMessage] = useState("");
+
+  const handleSave = () => {
+    onUpdate(form);
+    setMessage("Perfil actualizado correctamente.");
+  };
+
+  return (
+    <div style={{ display: "grid", gap: "22px" }}>
+      <SectionHeader title="Perfil de usuario" />
+      <Card style={{ display: "flex", gap: "24px", flexWrap: "wrap" }}>
+        <div style={{ minWidth: "120px", display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
+          <div style={{ width: "120px", height: "120px", borderRadius: "24px", overflow: "hidden", background: "var(--bg-hover)" }}>
+            <img src={form.photo || "https://via.placeholder.com/120x120?text=Foto"} alt="Foto perfil" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          </div>
+          <Input label="Foto URL" value={form.photo || ""} onChange={(e) => setForm(f => ({ ...f, photo: e.target.value }))} />
+        </div>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "14px" }}>
+          <Input label="Nombre" value={form.nombre || ""} onChange={(e) => setForm(f => ({ ...f, nombre: e.target.value }))} />
+          <Input label="Correo" value={form.email || ""} onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))} />
+          <Input label="Rol" value={form.rol || ""} disabled />
+          <button onClick={handleSave} style={{ width: "fit-content", background: "var(--accent)", border: "none", color: "#0d1117", padding: "12px 18px", borderRadius: "12px", fontWeight: 700, cursor: "pointer" }}>Guardar cambios</button>
+          {message && <div style={{ color: "var(--green)", fontSize: "13px" }}>{message}</div>}
+        </div>
+      </Card>
+    </div>
+  );
+}
+
 // ─── APP PRINCIPAL ─────────────────────────────────────────────────────────────
-export default function App({ onLogout }) {
-  const [page, setPage] = useState("dashboard");
+export default function App({ user, onLogout }) {
+  const [page, setPage] = useState(user?.rol === "Usuario" ? "catalogo" : "dashboard");
   const [products,  setProducts]  = useState(initialProducts);
   const [movements, setMovements] = useState(initialMovements);
   const [pqrs,      setPQRs]      = useState(initialPQR);
   const [users,     setUsers]     = useState(initialUsers);
+  const [cart,      setCart]      = useState([]);
   const [menuOpen,  setMenuOpen]  = useState(false);
+  const [userProfile, setUserProfile] = useState({
+    nombre: user?.nombre || "Usuario",
+    email: user?.email || "",
+    rol: user?.rol || "Usuario",
+    photo: user?.photo || "",
+  });
 
+  useEffect(() => {
+    const isAdmin = user?.rol === "Administrador";
+    setPage(isAdmin ? "dashboard" : "catalogo");
+    setUserProfile({
+      nombre: user?.nombre || "Usuario",
+      email: user?.email || "",
+      rol: user?.rol || "Usuario",
+      photo: user?.photo || "",
+    });
+  }, [user]);
+
+  const isAdmin = user?.rol === "Administrador";
+  const navItems = isAdmin ? ADMIN_NAV : USER_NAV;
   const lowStockCount = products.filter(p => p.cantidad <= p.minimo).length;
   const openPQRCount  = pqrs.filter(p => p.estado === "Abierto").length;
-  const badges = { inventario: lowStockCount || null, pqr: openPQRCount || null };
+  const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
+  const badges = {
+    inventario: lowStockCount || null,
+    pqr: openPQRCount || null,
+    carrito: cartCount || null,
+  };
 
   return (
     <>
@@ -1056,7 +1305,7 @@ export default function App({ onLogout }) {
 
             {/* Nav desktop */}
             <nav style={{ display: "flex", alignItems: "center", gap: "2px" }}>
-              {NAV.map(n => {
+              {navItems.map(n => {
                 const active = page === n.key;
                 return (
                   <button
@@ -1126,7 +1375,7 @@ export default function App({ onLogout }) {
           {/* Mobile nav drawer */}
           {menuOpen && (
             <div style={{ borderTop: "1px solid var(--border)", background: "var(--bg-elevated)" }} className="slide-dn">
-              {NAV.map(n => (
+              {navItems.map(n => (
                 <button
                   key={n.key}
                   onClick={() => { setPage(n.key); setMenuOpen(false); }}
@@ -1154,6 +1403,20 @@ export default function App({ onLogout }) {
           {page === "movimientos" && <Movimientos movements={movements} products={products} />}
           {page === "pqr"         && <PQR pqrs={pqrs} setPQRs={setPQRs} />}
           {page === "usuarios"    && <Usuarios users={users} setUsers={setUsers} />}
+          {page === "catalogo"    && <Catalog 
+            items={products} 
+            user={user}
+            cart={cart} 
+            onAdd={(item) => setCart(prev => {
+              const existing = prev.find(i => i.id === item.id);
+              if (existing) return prev.map(i => i.id === item.id ? { ...i, qty: i.qty + 1 } : i);
+              return [...prev, { ...item, qty: 1 }];
+            })} 
+            onEdit={(id, updatedItem) => setProducts(prev => prev.map(item => item.id === id ? { ...item, ...updatedItem } : item))}
+            onDelete={(id) => setProducts(prev => prev.filter(item => item.id !== id))}
+          />}
+          {page === "carrito"     && <CartPage cart={cart} onRemove={(id) => setCart(prev => prev.filter(item => item.id !== id))} onClear={() => setCart([])} />}
+          {page === "perfil"      && <Profile userProfile={userProfile} onUpdate={setUserProfile} />}
         </main>
 
         {/* ── Footer ── */}
