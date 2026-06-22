@@ -1021,6 +1021,7 @@ const ADMIN_NAV = [
   { key: "pqr",         label: "PQR",         icon: "◷" },
   { key: "usuarios",    label: "Usuarios",    icon: "⊙" },
   { key: "catalogo",    label: "Catálogo",    icon: "🛍" },
+  { key: "pagos",       label: "Pagos",       icon: "💳" },
 ];
 
 const USER_NAV = [
@@ -1169,7 +1170,102 @@ function Catalog({ items, user, onAdd, onEdit, onDelete }) {
 }
 
 function CartPage({ cart, onRemove, onClear }) {
+  const [showPayment, setShowPayment] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("tarjeta");
+  const [processingPayment, setProcessingPayment] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const total = cart.reduce((sum, item) => sum + item.precioVenta * item.qty, 0);
+
+  const handlePayNow = () => {
+    setShowPayment(true);
+  };
+
+  const handleCompletePayment = async () => {
+    setProcessingPayment(true);
+    await new Promise(r => setTimeout(r, 1500));
+    setProcessingPayment(false);
+    setPaymentSuccess(true);
+    setTimeout(() => {
+      setPaymentSuccess(false);
+      setShowPayment(false);
+      onClear();
+    }, 2000);
+  };
+
+  if (paymentSuccess) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+        <Card style={{ textAlign: "center", padding: "40px", background: "var(--green-bg)" }}>
+          <p style={{ margin: 0, fontSize: "40px" }}>✓</p>
+          <p style={{ margin: "12px 0 0", fontSize: "20px", fontWeight: 700, color: "var(--text-primary)" }}>¡Pago realizado con éxito!</p>
+          <p style={{ margin: "8px 0 0", color: "var(--text-muted)", fontSize: "14px" }}>Tu pedido ha sido confirmado</p>
+        </Card>
+      </div>
+    );
+  }
+
+  if (showPayment) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
+        <Card style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "20px" }}>
+          <div>
+            <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)" }}>Total a pagar</p>
+            <p style={{ margin: "6px 0 0", fontSize: "24px", fontWeight: 700 }}>{formatCurrency(total)}</p>
+          </div>
+          <button onClick={() => setShowPayment(false)} style={{ background: "var(--border)", color: "var(--text-primary)", border: "none", borderRadius: "8px", padding: "10px 14px", cursor: "pointer" }}>← Atrás</button>
+        </Card>
+
+        <Card style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+          <p style={{ margin: 0, fontSize: "16px", fontWeight: 700 }}>Método de pago</p>
+          {["tarjeta", "transferencia", "efectivo"].map((method) => (
+            <label key={method} style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px", border: "1px solid " + (paymentMethod === method ? "var(--accent)" : "var(--border)"), borderRadius: "8px", cursor: "pointer", background: paymentMethod === method ? "var(--accent-glow)" : "transparent" }}>
+              <input type="radio" name="payment" value={method} checked={paymentMethod === method} onChange={(e) => setPaymentMethod(e.target.value)} style={{ cursor: "pointer" }} />
+              <span style={{ fontSize: "14px", fontWeight: 500, textTransform: "capitalize" }}>{method === "tarjeta" ? "Tarjeta de crédito/débito" : method === "transferencia" ? "Transferencia bancaria" : "Efectivo contra entrega"}</span>
+            </label>
+          ))}
+        </Card>
+
+        {paymentMethod === "tarjeta" && (
+          <Card style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <input type="text" placeholder="Número de tarjeta" maxLength="16" style={{ padding: "10px 12px", border: "1px solid var(--border)", borderRadius: "8px", fontFamily: "monospace" }} />
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
+              <input type="text" placeholder="MM/AA" maxLength="5" style={{ padding: "10px 12px", border: "1px solid var(--border)", borderRadius: "8px" }} />
+              <input type="text" placeholder="CVV" maxLength="3" style={{ padding: "10px 12px", border: "1px solid var(--border)", borderRadius: "8px", fontFamily: "monospace" }} />
+            </div>
+          </Card>
+        )}
+
+        {paymentMethod === "transferencia" && (
+          <Card style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+            <div style={{ background: "var(--bg-elevated)", padding: "12px", borderRadius: "8px", fontSize: "13px", color: "var(--text-muted)" }}>
+              <p style={{ margin: 0, fontWeight: 700 }}>Datos de transferencia:</p>
+              <p style={{ margin: "6px 0 0" }}>Banco: Banco de Colombia</p>
+              <p style={{ margin: "4px 0 0" }}>Cuenta: 4520123456789</p>
+              <p style={{ margin: "4px 0 0" }}>Referencia: {Math.random().toString(36).substring(7).toUpperCase()}</p>
+            </div>
+          </Card>
+        )}
+
+        <button 
+          onClick={handleCompletePayment}
+          disabled={processingPayment}
+          style={{ 
+            background: "var(--accent)", 
+            color: "#0d1117", 
+            border: "none", 
+            borderRadius: "12px", 
+            padding: "14px 18px", 
+            fontWeight: 700, 
+            cursor: processingPayment ? "not-allowed" : "pointer",
+            opacity: processingPayment ? 0.6 : 1
+          }}
+        >
+          {processingPayment ? "Procesando..." : "Confirmar pago"}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "18px" }}>
       <SectionHeader title="Carrito de compra" action={cart.length ? <button onClick={onClear} style={{ background: "transparent", border: "1px solid var(--border)", padding: "10px 16px", borderRadius: "12px", color: "var(--text-muted)", cursor: "pointer" }}>Vaciar carrito</button> : null} />
@@ -1193,7 +1289,7 @@ function CartPage({ cart, onRemove, onClear }) {
               <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)" }}>Total</p>
               <p style={{ margin: "6px 0 0", fontSize: "22px", fontWeight: 700 }}>{formatCurrency(total)}</p>
             </div>
-            <button style={{ background: "var(--accent)", border: "none", borderRadius: "12px", padding: "14px 18px", fontWeight: 700, cursor: "pointer" }}>Pagar ahora</button>
+            <button onClick={handlePayNow} style={{ background: "var(--accent)", color: "#0d1117", border: "none", borderRadius: "12px", padding: "14px 18px", fontWeight: 700, cursor: "pointer" }}>Pagar ahora</button>
           </Card>
         </div>
       )}
