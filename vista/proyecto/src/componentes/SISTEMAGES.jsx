@@ -1522,7 +1522,7 @@ export default function App({ user, onLogout }) {
         }}>
           <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--accent)" }} />
           <span style={{ fontSize: "11px", color: "var(--text-faint)", letterSpacing: "0.04em" }}>
-            SISTEMA DE GESTIÓN EMPRESARIAL · v1.0
+            Stockly V1
           </span>
           <div style={{ width: "6px", height: "6px", borderRadius: "50%", background: "var(--accent)" }} />
         </footer>
